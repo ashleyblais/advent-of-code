@@ -7,7 +7,19 @@ import (
 	"strings"
 )
 
-func runPartOne(values []int64) {
+func main() {
+	partOne := runPartOne(12, 2)
+	fmt.Println("PART ONE ANSWER: ", partOne[0])
+
+	runPartTwo()
+}
+
+func runPartOne(inputOne, inputTwo int64) []int64 {
+	values := getComputerData()
+
+	values[1] = inputOne
+	values[2] = inputTwo
+
 	for i := 0; i < len(values); i += 4 {
 		var opcode = values[i]
 
@@ -18,7 +30,7 @@ func runPartOne(values []int64) {
 		var arraySection []int64
 
 		if opcode == 99 {
-			fmt.Println("PROGRAM ENDED")
+			break
 		} else {
 			arraySection = values[i:(i + 4)]
 			var valueOne = values[arraySection[1]]
@@ -36,10 +48,27 @@ func runPartOne(values []int64) {
 		}
 	}
 
-	fmt.Println(values[0])
+	return values
 }
 
-func main() {
+func runPartTwo() {
+	values := getComputerData()
+
+	for i := 0; i < len(values); i++ {
+		for j := 0; j < len(values); j++ {
+			values = runPartOne(int64(j), int64(i))
+
+			noun := values[1]
+			verb := values[2]
+
+			if values[0] == 19690720 {
+				fmt.Println("PART TWO ANSWER: ", 100*noun+verb, "INPUTS: ", noun, verb)
+			}
+		}
+	}
+}
+
+func getComputerData() []int64 {
 	data, fileReadErr := ioutil.ReadFile("./day-two-input.txt")
 
 	if fileReadErr != nil {
@@ -47,10 +76,8 @@ func main() {
 	}
 
 	values := strings.Split(string(data), ",")
-
 	var intValues []int64
 
-	// converting the values from the text files to ints for easier usage
 	for i := 0; i < len(values); i++ {
 		var convertedInt, conversionErr = strconv.ParseInt(values[i], 0, 64)
 		if conversionErr != nil {
@@ -60,8 +87,5 @@ func main() {
 		}
 	}
 
-	intValues[1] = 12
-	intValues[2] = 2
-
-	runPartOne(intValues)
+	return intValues
 }
