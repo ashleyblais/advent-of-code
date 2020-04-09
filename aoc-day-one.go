@@ -51,7 +51,7 @@ func runPartTwo(values []string) {
 }
 
 func main() {
-	data, fileReadErr := ioutil.ReadFile("./numbers.txt")
+	data, fileReadErr := ioutil.ReadFile("./day-one-input.txt")
 
 	if fileReadErr != nil {
 		fmt.Print(fileReadErr)
